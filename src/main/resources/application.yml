@@ -1,0 +1,9 @@
+openai:
+  api-key: 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
+  url: https://api.openai.com
+  connection-timeout: 2s
+  write-timeout: 10s
+  read-timeout: 10s
+
+server:
+  port: 9999
