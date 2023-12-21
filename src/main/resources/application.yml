@@ -1,5 +1,5 @@
 openai:
-  api-key: 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 # 장민규 개인계정 free tier 5$
+  api-key: secret
   url: https://api.openai.com
   connection-timeout: 2s
   write-timeout: 10s
