@@ -1,5 +1,4 @@
 openai:
-  api-key: secret
   url: https://api.openai.com
   connection-timeout: 2s
   write-timeout: 10s
@@ -7,3 +6,10 @@ openai:
 
 server:
   port: 8081
+
+spring:
+  cloud:
+    azure:
+      keyvault:
+        secret:
+          endpoint: https://chat-service-key-vault.vault.azure.net/

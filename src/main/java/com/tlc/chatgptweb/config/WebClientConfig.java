@@ -1,9 +1,12 @@
 package com.tlc.chatgptweb.config;
 
+import com.azure.security.keyvault.secrets.SecretClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tlc.chatgptweb.config.azure.KeyVault;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -26,23 +29,25 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Configuration
+@RequiredArgsConstructor
 public class WebClientConfig {
+
+    private final SecretClient secretClient;
 
     @Bean
     public WebClient openaiClient(@Value("${openai.url}") String openaiUrl,
-                                  @Value("${openai.api-key}") String openaiKey,
                                   @Value("${openai.connection-timeout}") Duration connectionTimeout,
                                   @Value("${openai.write-timeout}") Duration writeTimeout,
                                   @Value("${openai.read-timeout}") Duration readTimeout) {
 
-        log.info("openai.url : [{}], openai.api-key : [{}]", openaiUrl, openaiKey);
+        log.info("openai.url : [{}], openai.api-key : [{}]", openaiUrl, secretClient.getSecret(KeyVault.OPENAI_API_ACCESS_KEY.getKeyName()).getValue());
 
         return WebClient
                 .builder()
                 .exchangeStrategies(defaultExchangeStrategies())
                 .baseUrl(openaiUrl)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + openaiKey)
+                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + secretClient.getSecret(KeyVault.OPENAI_API_ACCESS_KEY.getKeyName()).getValue())
                 .clientConnector(new ReactorClientHttpConnector(httpClient(connectionTimeout, readTimeout, writeTimeout)))
                 .filter(logRequest())
                 .filter(logResponse())
