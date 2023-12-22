@@ -3,7 +3,7 @@ FROM gradle:7.3.1-jdk17 AS build
 WORKDIR /app
 COPY build.gradle ./
 COPY src ./src
-RUN gradle clean build --no-daemon  --stacktrace --info --warning-mode all
+RUN ./gradlew clean build --stacktrace --info --warning-mode all
 
 # for runtime
 FROM openjdk:17-jdk-slim AS runtime
