@@ -1,5 +1,8 @@
 # for build
 FROM gradle:7.4.0-jdk17 AS build
+ARG AZURE_CLIENT_ID
+ARG AZURE_CLIENT_SECRET
+ARG AZURE_TENANT_ID
 WORKDIR /app
 COPY build.gradle ./
 COPY src ./src
