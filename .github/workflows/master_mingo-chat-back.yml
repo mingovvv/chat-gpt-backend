@@ -18,8 +18,11 @@ jobs:
     - name: print environments
       run: |
         echo ${{ secrets.AZURE_CLIENT_ID }}
+        echo $AZURE_CLIENT_ID
         echo ${{ secrets.AZURE_CLIENT_SECRET }}
+        echo $AZURE_CLIENT_SECRET
         echo ${{ secrets.AZURE_TENANT_ID }}
+        echo $AZURE_TENANT_ID
 
 #    steps:
 #    - uses: actions/checkout@v2
