@@ -3,6 +3,7 @@ FROM gradle:7.4.0-jdk17 AS build
 ARG AZURE_CLIENT_ID
 ARG AZURE_CLIENT_SECRET
 ARG AZURE_TENANT_ID
+
 WORKDIR /app
 COPY build.gradle ./
 COPY src ./src
@@ -10,6 +11,10 @@ RUN gradle clean build --no-daemon  --stacktrace --info --warning-mode all
 
 # for runtime
 FROM openjdk:17-jdk-slim AS runtime
+ENV AZURE_CLIENT_ID=$AZURE_CLIENT_ID
+ENV AZURE_CLIENT_SECRET=$AZURE_CLIENT_SECRET
+ENV AZURE_TENANT_ID=$AZURE_TENANT_ID
+
 WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
 EXPOSE 8081
