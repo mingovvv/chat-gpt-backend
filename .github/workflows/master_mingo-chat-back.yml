@@ -11,26 +11,30 @@ on:
 
 jobs:
   build:
+    environment: dev-chat
     runs-on: 'ubuntu-latest'
 
     steps:
-    - uses: actions/checkout@v2
+    - name: print environments
+      run: |
+        echo ${{ secrets.AZURE_CLIENT_ID }}
+        echo ${{ secrets.AZURE_CLIENT_SECRET }}
+        echo ${{ secrets.AZURE_TENANT_ID }}
 
-    - name: Log in with Azure
-      uses: azure/login@v1
-      with:
-        creds: '${{ secrets.AZURE_CREDENTIALS }}'
-
-    - name: Azure CLI script
-      id: get-api-key
-      uses: azure/CLI@v1
-      with:
-        inlineScript: |
-          echo OPENAI_API_KEY=$(az keyvault secret show --vault-name chat-service-key-vault --name openai-api-key --query value --output tsv) >> $GITHUB_ENV
-
-    - name: Print environment variable
-      run: echo OPENAI_API_KEY
-
+#    steps:
+#    - uses: actions/checkout@v2
+#
+#    - name: Log in with Azure
+#      uses: azure/login@v1
+#      with:
+#        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+#
+#    - name: Azure CLI script
+#      id: get-api-key
+#      uses: azure/CLI@v1
+#      with:
+#        inlineScript: |
+#          echo OPENAI_API_KEY=$(az keyvault secret show --vault-name chat-service-key-vault --name openai-api-key --query value --output tsv) >> $GITHUB_ENV
 
 #    - name: Set up Docker Buildx
 #      uses: docker/setup-buildx-action@v2
